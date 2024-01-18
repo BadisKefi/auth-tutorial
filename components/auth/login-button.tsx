@@ -1,6 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BeatLoader } from "react-spinners";
+import { Button } from "../ui/button";
 
 interface LoginButtonProps {
   children: React.ReactNode;
@@ -13,8 +16,10 @@ export const LoginButton = ({
   mode = "redirect",
   asChild,
 }: LoginButtonProps) => {
+  const [waiting, setWaiting] = useState(false);
   const router = useRouter();
   const Clicked = () => {
+    setWaiting(true);
     router.push("/auth/login");
   };
 
@@ -24,7 +29,12 @@ export const LoginButton = ({
 
   return (
     <span onClick={Clicked} className="cursor-pointer">
-      {children}
+      {!waiting && children}
+      {waiting && (
+        <Button size={"lg"} variant={"secondary"}>
+          <BeatLoader />
+        </Button>
+      )}
     </span>
   );
 };
